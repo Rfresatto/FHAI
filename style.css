@@ -1,0 +1,31 @@
+body {
+  background: linear-gradient(to bottom, #d0f0e8, #ffffff);
+}
+
+.login-card {
+  max-width: 350px;
+  border: none;
+  background: transparent;
+}
+
+.text-welcome {
+  color: #2c9e82;
+}
+
+.text-logo {
+  color: #003764;
+}
+
+.tagline {
+  color: #2c9e82;
+}
+
+.form-control::placeholder {
+  color: #bbb;
+  opacity: 10;
+}
+
+.social-btn {
+  border-radius: 50%;
+  padding: 5px;
+}
