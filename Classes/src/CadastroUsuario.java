@@ -5,6 +5,7 @@ public class CadastroUsuario {
     private String email;
     private int contato;
     private String endereco;
+    private Usuario usuario;
 
     public CadastroUsuario(){
 
