@@ -1,5 +1,4 @@
 import java.sql.Date;
-
 public class Receita {
     private int idReceita;
     private String nome;

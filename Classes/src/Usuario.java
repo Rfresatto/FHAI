@@ -1,6 +1,7 @@
 public class Usuario {
     private String usuario;
     private String senha;
+    private Conta conta;
 
     public Usuario (){
 
