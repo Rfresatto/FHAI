@@ -5,7 +5,7 @@ public class Conta {
     private String tipoConta; // "corrente", "poupanca", "salario"
     private double saldo;
     private String cpfTitular;
-    private Cartao cartao;
+    Cartao cartao;
 
     public Conta() {
     }

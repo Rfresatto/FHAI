@@ -9,9 +9,9 @@ public class Cartao {
     private String cvv;
     private double limite;
     private double faturaAtual;
-    private Conta conta;
     private Despesa saida;
     private Receita entrada;
+    Conta conta;
 
     public Cartao() {
     }
