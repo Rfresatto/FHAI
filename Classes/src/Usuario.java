@@ -1,7 +1,7 @@
 public class Usuario {
     private String usuario;
     private String senha;
-    private Conta conta;
+    Conta conta;
 
     public Usuario (){
 
@@ -25,6 +25,6 @@ public class Usuario {
     }
 
     public void recuperarSenha(){
-        System.out.println("Acessando recupareção de senha...");
+        System.out.println("Acessando recuperação de senha...");
     }
 }
