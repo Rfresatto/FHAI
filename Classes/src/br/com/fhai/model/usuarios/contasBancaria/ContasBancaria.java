@@ -1,21 +1,28 @@
-package br.com.fhai.model.usuarios.contasBancarias;
+package br.com.fhai.model.usuarios.contasBancaria;
 
-import br.com.fhai.model.usuarios.contasBancarias.cartoes.Cartao;
+import br.com.fhai.model.usuarios.contasBancaria.cartoes.Cartoes;
 
 public class ContasBancaria {
-    private String banco;
+    private String nome;
     private String numeroConta;
     private String agencia;
     private String tipoConta; // "corrente", "poupanca", "salario"
-    private double saldo;
-    private Cartao cartao;
+    private double saldo = 0;
+    private Cartoes cartao;
 
     //  Contrutores
     public ContasBancaria() {
     }
 
-    public ContasBancaria(String banco, String numeroConta, String agencia, String tipoConta, double saldo, Cartao cartao) {
-        this.banco = banco;
+    public ContasBancaria(String nome, String numeroConta, String agencia, String tipoConta) {
+        this.nome = nome;
+        this.numeroConta = numeroConta;
+        this.agencia = agencia;
+        this.tipoConta = tipoConta;
+    }
+
+    public ContasBancaria(String banco, String numeroConta, String agencia, String tipoConta, double saldo, Cartoes cartao) {
+        this.nome = banco;
         this.numeroConta = numeroConta;
         this.agencia = agencia;
         this.tipoConta = tipoConta;
@@ -24,12 +31,12 @@ public class ContasBancaria {
     }
 
     //  Getters and Setters ... Atalho para criação padrão(IDE: Intellij): Alt + Ins
-    public String getBanco() {
-        return banco;
+    public String getNome() {
+        return nome;
     }
 
-    public void setBanco(String banco) {
-        this.banco = banco;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getNumeroConta() {
@@ -64,18 +71,24 @@ public class ContasBancaria {
         this.saldo = saldo;
     }
 
-    public Cartao getCartao() {
+    public Cartoes getCartao() {
         return cartao;
     }
 
-    public void setCartao(Cartao cartao) {
+    public void setCartao(Cartoes cartao) {
         this.cartao = cartao;
     }
 
     //  Métodos
-    public String visualizarSaldo() {
-        return "Exibindo saldo atual da conta " +
-                this.numeroConta + ": R$ " +
-                this.saldo;
+    public String exibirDados() {
+        return "Banco:" + this.nome +
+                "\nNumero da conta: " + this.numeroConta +
+                "\nSaldo: R$ " + this.cartao.getSaldo();
+    }
+
+    public String exibirDadosCartão() {
+        return "-~-~-~-~-~- Dados do Cartão -~-~-~-~-~-" +
+                this.getCartao().exibirDados();
+
     }
 }

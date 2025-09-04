@@ -1,20 +1,17 @@
-package br.com.fhai.model.usuarios.contasBancarias.cartoes.transacoes;
+package br.com.fhai.model.usuarios.contasBancaria.cartoes;
 
-import java.sql.Date;
+public class Transacoes {
 
-public class Despesas {
     private String nome;
     private String descricao;
     private double valor;
-    private Date data;
+    private String data;
 
     //  Contrutores
-    public Despesas() {
-
+    public Transacoes() {
     }
 
-    public Despesas(String nome, String descricao, double valor, Date data) {
-
+    public Transacoes(String nome, String descricao, double valor, String data) {
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
@@ -22,42 +19,35 @@ public class Despesas {
     }
 
     //  Getters and Setters ... Atalho para criação padrão(IDE: Intellij): Alt + Ins
-
     public String getNome() {
         return nome;
     }
 
-    public Despesas setNome(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
-        return this;
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public Despesas setDescricao(String descricao) {
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
-        return this;
     }
 
-    public double getDespesa() {
+    public double getValor() {
         return valor;
     }
 
-    public Despesas setDespesa(double valor) {
+    public void setValor(double valor) {
         this.valor = valor;
-        return this;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public Despesas setData(Date data) {
+    public void setData(String data) {
         this.data = data;
-        return this;
     }
-
 }
-
