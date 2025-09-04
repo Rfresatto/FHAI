@@ -1,12 +1,12 @@
 package br.com.fhai.model.usuarios;
 
-import br.com.fhai.model.usuarios.contasBancarias.ContasBancaria;
+import br.com.fhai.model.usuarios.contasBancaria.ContasBancaria;
 
 public class Usuarios extends Enderecos{
     private String nome;
     private String senha;
     private String email;
-    private int contato;
+    private long contato;
     private Enderecos endereco;
     private ContasBancaria conta;
 
@@ -14,7 +14,7 @@ public class Usuarios extends Enderecos{
     public Usuarios(){
     }
 
-    public Usuarios(String nome, String senha, String email, int contato, Enderecos endereco, ContasBancaria conta) {
+    public Usuarios(String nome, String senha, String email, long contato, Enderecos endereco, ContasBancaria conta) {
         this.nome = nome;
         this.senha = senha;
         this.email = email;
@@ -51,11 +51,11 @@ public class Usuarios extends Enderecos{
         return this;
     }
 
-    public int getContato() {
+    public long getContato() {
         return contato;
     }
 
-    public Usuarios setContato(int contato) {
+    public Usuarios setContato(long contato) {
         this.contato = contato;
         return this;
     }
@@ -86,15 +86,27 @@ public class Usuarios extends Enderecos{
         return "-~-~-~-~-~- Dados do Perfil -~-~-~-~-~-\n" +
                 "\nNome: " + this.getNome() +
                 "\nEmail: " + this.getEmail() +
+                "\nContato: " + this.getContato();
+
+    }
+
+    public String getDetalhesCompleto(){
+        return "-~-~-~-~-~- Dados do Perfil Atualizado -~-~-~-~-~-\n" +
+                "\nNome: " + this.getNome() +
+                "\nEmail: " + this.getEmail() +
                 "\nContato: " + this.getContato() +
                 "\nEndereço: " + this.getEndereco().getEnderecoCompleto();
     }
 
+
     public String getDadosBancarios(){
         return "-~-~-~-~-~- Dados Bancários -~-~-~-~-~-\n" +
-                "\nBanco: " + this.getConta().getBanco() +
-                "\nNúmero do Cartão: " + this.getConta().getNumeroConta() +
-                "\nSaldo: " + this.getConta().getSaldo();
+                this.getConta().exibirDados();
 
+    }
+
+    public String exibirDadosCartao() {
+        return "-~-~-~-~-~- Dados do Cartão -~-~-~-~-~-" +
+                this.conta.getCartao().exibirDados();
     }
 }
