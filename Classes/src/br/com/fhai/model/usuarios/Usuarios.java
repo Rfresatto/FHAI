@@ -2,24 +2,34 @@ package br.com.fhai.model.usuarios;
 
 import br.com.fhai.model.usuarios.contasBancaria.ContasBancaria;
 
-public class Usuarios extends Enderecos{
+public class Usuarios extends Enderecos {
     private String nome;
     private String senha;
     private String email;
     private long contato;
-    private Enderecos endereco;
     private ContasBancaria conta;
 
     //  Contrutores
-    public Usuarios(){
+    public Usuarios() {
+        super();
     }
 
-    public Usuarios(String nome, String senha, String email, long contato, Enderecos endereco, ContasBancaria conta) {
+    @Override
+    public String getEnderecoCompleto() {
+        return this.getLogradouro() + ", n°: " +
+                this.getNumero() + ", Comp: " +
+                this.getComplemento() + ", CEP: " +
+                this.getCep() + ", " +
+                this.getCidade() + " - " +
+                this.getEstado();
+    }
+
+    public Usuarios(String logradouro, String numero, String complemento, int cep, String cidade, String estado, String nome, String senha, String email, long contato, ContasBancaria conta) {
+        super(logradouro, numero, complemento, cep, cidade, estado);
         this.nome = nome;
         this.senha = senha;
         this.email = email;
         this.contato = contato;
-        this.endereco = endereco;
         this.conta = conta;
     }
 
@@ -60,15 +70,6 @@ public class Usuarios extends Enderecos{
         return this;
     }
 
-    public Enderecos getEndereco() {
-        return endereco;
-    }
-
-    public Usuarios setEndereco(Enderecos endereco) {
-        this.endereco = endereco;
-        return this;
-    }
-
     public ContasBancaria getConta() {
         return conta;
     }
@@ -78,31 +79,25 @@ public class Usuarios extends Enderecos{
     }
 
     //  Métodos
-    public void login(String name){
+    public void login(String name) {
         System.out.println("Login realizado! Bem vindo," + name + " !");
     }
 
-    public String getDetalhes(){
+    public String getDetalhes() {
         return "-~-~-~-~-~- Dados do Perfil -~-~-~-~-~-\n" +
                 "\nNome: " + this.getNome() +
                 "\nEmail: " + this.getEmail() +
                 "\nContato: " + this.getContato();
-
     }
 
-    public String getDetalhesCompleto(){
-        return "-~-~-~-~-~- Dados do Perfil Atualizado -~-~-~-~-~-\n" +
-                "\nNome: " + this.getNome() +
-                "\nEmail: " + this.getEmail() +
-                "\nContato: " + this.getContato() +
-                "\nEndereço: " + this.getEndereco().getEnderecoCompleto();
+    public String getDetalhesCompleto() {
+        return getDetalhes() +
+                "\nEndereço: " + this.getEnderecoCompleto();
     }
 
-
-    public String getDadosBancarios(){
+    public String getDadosBancarios() {
         return "-~-~-~-~-~- Dados Bancários -~-~-~-~-~-\n" +
                 this.getConta().exibirDados();
-
     }
 
     public String exibirDadosCartao() {
