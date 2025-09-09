@@ -1,9 +1,9 @@
-package br.com.fhai.model.usuarios.contasBancaria.cartoes;
+package br.com.fhai.model.usuario.contaBancaria.cartao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cartoes {
+public class Cartao {
     private String nome;
     private long numeroCartao;
     private String tipoCartao; // crédito, débito
@@ -12,13 +12,13 @@ public class Cartoes {
     private int cvv;
     private double saldo = 0;
 
-    private List<Transacoes> transacoes = new ArrayList<>();
+    private List<Transacao> transacoes = new ArrayList<>();
 
     //  Contrutores
-    public Cartoes() {
+    public Cartao() {
     }
 
-    public Cartoes(String nome, long numeroCartao, String tipoCartao, String nomeTitular, String dataValidade, int cvv) {
+    public Cartao(String nome, long numeroCartao, String tipoCartao, String nomeTitular, String dataValidade, int cvv) {
         this.nome = nome;
         this.numeroCartao = numeroCartao;
         this.tipoCartao = tipoCartao;
@@ -85,7 +85,7 @@ public class Cartoes {
         this.nome = nome;
     }
 
-    public List<Transacoes> getTransacoes() {
+    public List<Transacao> getTransacoes() {
         return transacoes;
     }
 
@@ -101,7 +101,7 @@ public class Cartoes {
                 "\nSaldo: " + this.getSaldo();
     }
 
-    public void adicionarTransacao(Transacoes transacao, boolean receita) {
+    public void adicionarTransacao(Transacao transacao, boolean receita) {
         if (receita) {
             this.saldo += transacao.getValor();
         } else {

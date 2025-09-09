@@ -1,9 +1,9 @@
 package br.com.fhai.app;
 
-import br.com.fhai.model.usuarios.Usuarios;
-import br.com.fhai.model.usuarios.contasBancaria.ContasBancaria;
-import br.com.fhai.model.usuarios.contasBancaria.cartoes.Cartoes;
-import br.com.fhai.model.usuarios.contasBancaria.cartoes.Transacoes;
+import br.com.fhai.model.usuario.Usuario;
+import br.com.fhai.model.usuario.contaBancaria.ContaBancaria;
+import br.com.fhai.model.usuario.contaBancaria.cartao.Cartao;
+import br.com.fhai.model.usuario.contaBancaria.cartao.Transacao;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -36,7 +36,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Usuarios usuario = null;
+        Usuario usuario = null;
 
         int op;
         boolean login = false;
@@ -58,7 +58,7 @@ public class Main {
             switch (op) {
                 case 1:
                     if (!login) {
-                        usuario = new Usuarios();
+                        usuario = new Usuario();
 
                         System.out.print("Digite o nome: ");
                         String nome = sc.nextLine();
@@ -123,7 +123,7 @@ public class Main {
                             System.out.println("Digite o tipo da conta (exemplo: corrente, poupança, salário): ");
                             String tipoConta = sc.nextLine();
 
-                            usuario.setConta(new ContasBancaria(nome, numeroConta, numeroAgencia, tipoConta));
+                            usuario.setConta(new ContaBancaria(nome, numeroConta, numeroAgencia, tipoConta));
                             temConta = true;
                         }
                     } else {
@@ -159,7 +159,7 @@ public class Main {
                                 int cvv = sc.nextInt();
                                 sc.nextLine();
 
-                                usuario.getConta().setCartao(new Cartoes(nome, numero, tipoCartao, nomeTitular, dataValidade, cvv));
+                                usuario.getConta().setCartao(new Cartao(nome, numero, tipoCartao, nomeTitular, dataValidade, cvv));
                                 temCartao = true;
                             }
                         }
@@ -185,7 +185,7 @@ public class Main {
                             System.out.print("Digite a data da despesa (DD/MM/AAAA): ");
                             String data = sc.nextLine();
 
-                            Transacoes despesa = new Transacoes(nomeDespesa, descricao, valor, data);
+                            Transacao despesa = new Transacao(nomeDespesa, descricao, valor, data);
                             usuario.getConta().getCartao().adicionarTransacao(despesa, false);
 
                             System.out.println("Despesa adicionada com sucesso!");
@@ -213,7 +213,7 @@ public class Main {
                             System.out.print("Digite a data da receita (DD/MM/AAAA): ");
                             String data = sc.nextLine();
 
-                            Transacoes receita = new Transacoes(nomeReceita, descricao, valor, data);
+                            Transacao receita = new Transacao(nomeReceita, descricao, valor, data);
                             usuario.getConta().getCartao().adicionarTransacao(receita, true);
 
                             System.out.println("Receita adicionada com sucesso!");
@@ -227,7 +227,7 @@ public class Main {
                     if (login) {
                         if (temTransacao) {
                             System.out.println("\nHistórico de Transações:");
-                            for (Transacoes t : usuario.getConta().getCartao().getTransacoes()) {
+                            for (Transacao t : usuario.getConta().getCartao().getTransacoes()) {
                                 System.out.println("- " + t.getNome() + " | " + t.getDescricao() + " | R$ " + t.getValor() + " | " + t.getData());
                             }
                             System.out.println("Saldo atual: R$ " + usuario.getConta().getCartao().getSaldo());
