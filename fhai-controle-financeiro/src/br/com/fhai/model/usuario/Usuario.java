@@ -1,16 +1,16 @@
-package br.com.fhai.model.usuarios;
+package br.com.fhai.model.usuario;
 
-import br.com.fhai.model.usuarios.contasBancaria.ContasBancaria;
+import br.com.fhai.model.usuario.contaBancaria.ContaBancaria;
 
-public class Usuarios extends Enderecos {
+public class Usuario extends Endereco {
     private String nome;
     private String senha;
     private String email;
     private long contato;
-    private ContasBancaria conta;
+    private ContaBancaria conta;
 
     //  Contrutores
-    public Usuarios() {
+    public Usuario() {
         super();
     }
 
@@ -24,7 +24,7 @@ public class Usuarios extends Enderecos {
                 this.getEstado();
     }
 
-    public Usuarios(String logradouro, String numero, String complemento, int cep, String cidade, String estado, String nome, String senha, String email, long contato, ContasBancaria conta) {
+    public Usuario(String logradouro, String numero, String complemento, int cep, String cidade, String estado, String nome, String senha, String email, long contato, ContaBancaria conta) {
         super(logradouro, numero, complemento, cep, cidade, estado);
         this.nome = nome;
         this.senha = senha;
@@ -38,7 +38,7 @@ public class Usuarios extends Enderecos {
         return nome;
     }
 
-    public Usuarios setNome(String nome) {
+    public Usuario setNome(String nome) {
         this.nome = nome;
         return this;
     }
@@ -47,7 +47,7 @@ public class Usuarios extends Enderecos {
         return senha;
     }
 
-    public Usuarios setSenha(String senha) {
+    public Usuario setSenha(String senha) {
         this.senha = senha;
         return this;
     }
@@ -56,7 +56,7 @@ public class Usuarios extends Enderecos {
         return email;
     }
 
-    public Usuarios setEmail(String email) {
+    public Usuario setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -65,16 +65,16 @@ public class Usuarios extends Enderecos {
         return contato;
     }
 
-    public Usuarios setContato(long contato) {
+    public Usuario setContato(long contato) {
         this.contato = contato;
         return this;
     }
 
-    public ContasBancaria getConta() {
+    public ContaBancaria getConta() {
         return conta;
     }
 
-    public void setConta(ContasBancaria conta) {
+    public void setConta(ContaBancaria conta) {
         this.conta = conta;
     }
 

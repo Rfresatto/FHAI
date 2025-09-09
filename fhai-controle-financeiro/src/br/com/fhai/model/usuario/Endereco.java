@@ -1,6 +1,6 @@
-package br.com.fhai.model.usuarios;
+package br.com.fhai.model.usuario;
 
-public abstract class Enderecos {
+public abstract class Endereco {
     private String logradouro;
     private String numero;
     private String complemento;
@@ -9,11 +9,11 @@ public abstract class Enderecos {
     private String estado;
 
     //construtores
-    public Enderecos(){
+    public Endereco(){
 
     }
 
-    public Enderecos(String logradouro, String numero, String complemento, int cep, String cidade, String estado) {
+    public Endereco(String logradouro, String numero, String complemento, int cep, String cidade, String estado) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
