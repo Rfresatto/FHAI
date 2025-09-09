@@ -1,7 +1,6 @@
 package br.com.fhai.app;
 
 import br.com.fhai.model.usuarios.Usuarios;
-import br.com.fhai.model.usuarios.Enderecos;
 import br.com.fhai.model.usuarios.contasBancaria.ContasBancaria;
 import br.com.fhai.model.usuarios.contasBancaria.cartoes.Cartoes;
 import br.com.fhai.model.usuarios.contasBancaria.cartoes.Transacoes;
@@ -12,7 +11,7 @@ import java.util.Scanner;
 public class Main {
     private static void menuLogado() {
         System.out.print("""
-                Escolha uma opção:
+                
                 \n1- Exibir dados do perfil
                 2- Cadastro de endereço
                 3- Cadastrar/Exibir conta bancária
@@ -22,15 +21,17 @@ public class Main {
                 7- Exibir transações
                 \n0- Sair
                 """);
+        System.out.print("Escolha uma opção: ");
     }
 
     private static void menuNaoLogado() {
         System.out.print("""
-                \nEscolha uma opção:
+                
                 \n1- Cadastrar-se
                 2- login
                 \n0- Sair
                 """);
+        System.out.print("Escolha uma opção: ");
     }
 
     public static void main(String[] args) {
@@ -60,24 +61,37 @@ public class Main {
                         usuario = new Usuarios();
 
                         System.out.print("Digite o nome: ");
-                        usuario.setNome(sc.nextLine());
-
+                        String nome = sc.nextLine();
                         System.out.print("Digite sua senha: ");
-                        usuario.setSenha(sc.nextLine());
+                        String senha = sc.nextLine();
                         System.out.print("Digite seu email: ");
-                        usuario.setEmail(sc.nextLine());
+                        String email = sc.nextLine();
                         System.out.print("Digite um número de contato: ");
-                        usuario.setContato(sc.nextLong());
+                        long contato = sc.nextLong();
+
+                        usuario.setNome(nome).setSenha(senha).setEmail(email).setContato(contato);
+
                         login = true;
                         System.out.println("Usuário cadastrado e login efetuado! Olá, " + usuario.getNome());
                     } else {
-                        System.out.println(usuario.getEndereco() != null ? usuario.getDetalhesCompleto() : usuario.getDetalhes());
+                        System.out.println(usuario.getLogradouro() != null ? usuario.getDetalhesCompleto() : usuario.getDetalhes());
                     }
                     break;
                 case 2:
                     if (login) {
-                        System.out.println("Informe o nome da Rua, número, complemento, CEP, cidade e o estado, ao final de cada um tecle: ENTER");
-                        usuario.setEndereco(new Enderecos(sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine()));
+                        System.out.println("Digite o nome da Rua:");
+                        usuario.setLogradouro(sc.nextLine());
+                        System.out.println("Digite o número: ");
+                        usuario.setNumero(sc.nextLine());
+                        System.out.println("Digite o complemento: ");
+                        usuario.setComplemento(sc.nextLine());
+                        System.out.println("Digite o CEP: ");
+                        usuario.setCep(sc.nextInt());
+                        sc.nextLine();
+                        System.out.println("Digite a cidade: ");
+                        usuario.setCidade(sc.nextLine());
+                        System.out.println("Digite o estado: ");
+                        usuario.setEstado(sc.nextLine());
 
                         System.out.println("Perfil atualizado com sucesso!");
                     } else {
@@ -211,7 +225,7 @@ public class Main {
                     break;
                 case 7:
                     if (login) {
-                        if (temTransacao){
+                        if (temTransacao) {
                             System.out.println("\nHistórico de Transações:");
                             for (Transacoes t : usuario.getConta().getCartao().getTransacoes()) {
                                 System.out.println("- " + t.getNome() + " | " + t.getDescricao() + " | R$ " + t.getValor() + " | " + t.getData());

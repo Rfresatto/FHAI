@@ -1,10 +1,10 @@
 package br.com.fhai.model.usuarios;
 
-public class Enderecos {
+public abstract class Enderecos {
     private String logradouro;
     private String numero;
     private String complemento;
-    private String cep;
+    private int cep;
     private String cidade;
     private String estado;
 
@@ -13,7 +13,7 @@ public class Enderecos {
 
     }
 
-    public Enderecos(String logradouro, String numero, String complemento, String cep, String cidade, String estado) {
+    public Enderecos(String logradouro, String numero, String complemento, int cep, String cidade, String estado) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -39,11 +39,11 @@ public class Enderecos {
         this.numero = numero;
     }
 
-    public String getCep() {
+    public int getCep() {
         return cep;
     }
 
-    public void setCep(String cep) {
+    public void setCep(int cep) {
         this.cep = cep;
     }
 
@@ -72,14 +72,7 @@ public class Enderecos {
     }
 
     //metodo
-    public String getEnderecoCompleto(){
-        return this.logradouro + ", " +
-                this.numero + ", " +
-                this.complemento + ", " +
-                this.cep + ", " +
-                this.cidade + ", " +
-                this.estado;
-    }
+    public abstract String getEnderecoCompleto();
 }
 
 
