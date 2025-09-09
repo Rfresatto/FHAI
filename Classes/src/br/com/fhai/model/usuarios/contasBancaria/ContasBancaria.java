@@ -81,13 +81,15 @@ public class ContasBancaria {
 
     //  Métodos
     public String exibirDados() {
-        return "Banco:" + this.nome +
+        return "\n-~-~-~-~-~- Dados do Cartão -~-~-~-~-~-" +
+                "\nBanco:" + this.nome +
                 "\nNumero da conta: " + this.numeroConta +
-                "\nSaldo: R$ " + this.cartao.getSaldo();
+                "\nAgência: " + this.getAgencia() +
+                "\nTipo da conta: " + this.getTipoConta();
     }
 
-    public String exibirDadosCartão() {
-        return "-~-~-~-~-~- Dados do Cartão -~-~-~-~-~-" +
+    public String exibirDadosCartao() {
+        return exibirDados() + "\n" +
                 this.getCartao().exibirDados();
 
     }

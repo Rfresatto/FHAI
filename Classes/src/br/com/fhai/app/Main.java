@@ -11,13 +11,13 @@ import java.util.Scanner;
 public class Main {
     private static void menuLogado() {
         System.out.print("""
-                
+                \n-~-~-~-~-~- Menu -~-~-~-~-~-
                 \n1- Exibir dados do perfil
                 2- Cadastro de endereço
                 3- Cadastrar/Exibir conta bancária
                 4- Cadastrar/Exibir cartão
-                5- Adicionar/Exibir despesas
-                6- Adicionar/Exibir receita
+                5- Adicionar despesas
+                6- Adicionar receita
                 7- Exibir transações
                 \n0- Sair
                 """);
@@ -112,7 +112,7 @@ public class Main {
                 case 3:
                     if (login) {
                         if (temConta) {
-                            System.out.println(usuario.getDadosBancarios());
+                            System.out.println(!temCartao ? usuario.getConta().exibirDados() : usuario.getConta().exibirDadosCartao());
                         } else {
                             System.out.println("Digite o nome do Banco: ");
                             String nome = sc.nextLine();
@@ -137,7 +137,7 @@ public class Main {
                             System.out.println("Você ainda não possui um conta bancária vinculada.\nTecle 3");
                         } else {
                             if (temCartao) {
-                                System.out.println(usuario.exibirDadosCartao());
+                                System.out.println(usuario.getConta().exibirDadosCartao());
                             } else {
                                 System.out.print("Digite o nome do cartão: ");
                                 String nome = sc.nextLine();

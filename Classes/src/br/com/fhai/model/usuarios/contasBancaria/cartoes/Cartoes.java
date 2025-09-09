@@ -92,13 +92,13 @@ public class Cartoes {
     //  Métodos
 
     public String exibirDados() {
-        return "\nNome do cartão: " + this.nome +
-                "\nNúmero: " + this.numeroCartao +
-                "\nTipo: " + this.tipoCartao +
-                "\nNome do Titular: " + this.nomeTitular +
-                "\nData de validade: " + this.dataValidade +
-                "\nCódigo de segurança: " + this.cvv +
-                "\nSaldo: " + this.saldo;
+        return "\nNome do cartão: " + this.getNome() +
+                "\nNúmero: " + this.getNumeroCartao() +
+                "\nTipo: " + this.getTipoCartao() +
+                "\nNome do Titular: " + this.getNomeTitular() +
+                "\nData de validade: " + this.getDataValidade() +
+                "\nCódigo de segurança: " + this.getCvv() +
+                "\nSaldo: " + this.getSaldo();
     }
 
     public void adicionarTransacao(Transacoes transacao, boolean receita) {
