@@ -1,6 +1,6 @@
-package br.com.fhai.model.usuarios.contasBancaria.cartoes;
+package br.com.fhai.model.usuario.contaBancaria.cartao;
 
-public class Transacoes {
+public class Transacao {
 
     private String nome;
     private String descricao;
@@ -8,10 +8,10 @@ public class Transacoes {
     private String data;
 
     //  Contrutores
-    public Transacoes() {
+    public Transacao() {
     }
 
-    public Transacoes(String nome, String descricao, double valor, String data) {
+    public Transacao(String nome, String descricao, double valor, String data) {
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;

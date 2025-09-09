@@ -1,27 +1,27 @@
-package br.com.fhai.model.usuarios.contasBancaria;
+package br.com.fhai.model.usuario.contaBancaria;
 
-import br.com.fhai.model.usuarios.contasBancaria.cartoes.Cartoes;
+import br.com.fhai.model.usuario.contaBancaria.cartao.Cartao;
 
-public class ContasBancaria {
+public class ContaBancaria {
     private String nome;
     private String numeroConta;
     private String agencia;
     private String tipoConta; // "corrente", "poupanca", "salario"
     private double saldo = 0;
-    private Cartoes cartao;
+    private Cartao cartao;
 
     //  Contrutores
-    public ContasBancaria() {
+    public ContaBancaria() {
     }
 
-    public ContasBancaria(String nome, String numeroConta, String agencia, String tipoConta) {
+    public ContaBancaria(String nome, String numeroConta, String agencia, String tipoConta) {
         this.nome = nome;
         this.numeroConta = numeroConta;
         this.agencia = agencia;
         this.tipoConta = tipoConta;
     }
 
-    public ContasBancaria(String banco, String numeroConta, String agencia, String tipoConta, double saldo, Cartoes cartao) {
+    public ContaBancaria(String banco, String numeroConta, String agencia, String tipoConta, double saldo, Cartao cartao) {
         this.nome = banco;
         this.numeroConta = numeroConta;
         this.agencia = agencia;
@@ -71,11 +71,11 @@ public class ContasBancaria {
         this.saldo = saldo;
     }
 
-    public Cartoes getCartao() {
+    public Cartao getCartao() {
         return cartao;
     }
 
-    public void setCartao(Cartoes cartao) {
+    public void setCartao(Cartao cartao) {
         this.cartao = cartao;
     }
 
