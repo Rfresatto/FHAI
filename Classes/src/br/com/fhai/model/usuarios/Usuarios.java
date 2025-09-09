@@ -94,14 +94,4 @@ public class Usuarios extends Enderecos {
         return getDetalhes() +
                 "\nEndereço: " + this.getEnderecoCompleto();
     }
-
-    public String getDadosBancarios() {
-        return "-~-~-~-~-~- Dados Bancários -~-~-~-~-~-\n" +
-                this.getConta().exibirDados();
-    }
-
-    public String exibirDadosCartao() {
-        return "-~-~-~-~-~- Dados do Cartão -~-~-~-~-~-" +
-                this.conta.getCartao().exibirDados();
-    }
 }
