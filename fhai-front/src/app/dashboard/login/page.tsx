@@ -1,4 +1,5 @@
 "use client";
+import { CardeDeTransacao } from "@/components/CardDeTransacao";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -101,6 +102,24 @@ export default function LoginPage() {
                 Forgot password?
               </button>
             </div>
+
+            <CardeDeTransacao
+              key={1231}
+              icon="NT"
+              title="Netflix"
+              subtitulo="Apr 05"
+              tipo="-"
+              value={29.9}
+            />
+
+            <CardeDeTransacao
+              key={31312}
+              icon="NT"
+              title="Netflix"
+              subtitulo="Apr 05"
+              tipo="-"
+              value={29.9}
+            />
 
             <button
               type="submit"

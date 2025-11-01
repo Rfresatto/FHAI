@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main className="min-h-screen bg-linear-to-br from-blue-950 to-green-200 flex-column items-center justify-center p-5">
+        <main className="min-h-screen bg-linear-to-br from-green-400 to-white flex-column items-center justify-center p-5">
           {children}
           <Footer />
         </main>
