@@ -1,6 +1,7 @@
 "use client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await fetch("/api/dashboard/login", {
+      const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -38,29 +39,36 @@ export default function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    alert("Login com Google");
+    alert("Desculpe, essa funcionalidade ainda não está disponível");
   };
 
   const handleFacebookLogin = () => {
-    alert("Login com Facebook");
+    alert("Desculpe, essa funcionalidade ainda não está disponível");
   };
 
   const handleForgotPassword = () => {
-    alert("Redefinir senha");
+    alert("Desculpe, essa funcionalidade ainda não está disponível");
   };
 
   const handleSignUp = () => {
     alert("Criar conta");
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    router.push("/dashboard");
+  }, [router]);
+
   return (
     <div className="min-h-screen flex items-center justify-center p-5">
       <div className="relative rounded-3xl p-12 w-full max-w-md shadow-2xl">
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 justify-items-center">
           <h2 className="text-black text-lg font-medium mb-2">Welcome to</h2>
-          <h1 className="text-blue-900 text-7xl font-black tracking-wider my-4">
-            FHAI
-          </h1>
+          <Image src="/assets/icon.png" alt="icon" width={200} height={200} />
           <p className="text-black text-base font-medium leading-relaxed">
             Your smart financial
             <br />
