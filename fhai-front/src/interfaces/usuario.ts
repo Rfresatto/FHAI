@@ -1,4 +1,4 @@
-interface TUsuarios {
+export interface TUsuarios {
     id: number
     nome: string
     senha: number
