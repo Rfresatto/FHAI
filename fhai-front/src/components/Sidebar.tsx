@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Settings, label: "Configurações", href: "/configuracoes" },
+  { icon: Settings, label: "Configurações", href: "/configuracao" },
 ];
 
 export default function Sidebar() {
