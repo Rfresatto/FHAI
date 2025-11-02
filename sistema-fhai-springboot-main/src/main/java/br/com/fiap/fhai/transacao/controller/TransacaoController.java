@@ -10,6 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/transacao")
+@CrossOrigin(
+        origins = "http://localhost:3000",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class TransacaoController {
 
     @Autowired
