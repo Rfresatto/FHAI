@@ -9,6 +9,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cartao")
+@CrossOrigin(
+        origins = "http://localhost:3000",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+        allowedHeaders = "*",
+        allowCredentials = "true"
+)
 public class CartaoController {
 
     private final CartaoService cartaoService;

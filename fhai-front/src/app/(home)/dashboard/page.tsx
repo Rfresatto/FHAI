@@ -1,14 +1,32 @@
 "use client";
 import Header from "@/components/Header";
 import { StatusCard } from "@/components/StatusCard";
-import { TUsuarios } from "@/interfaces/usuario";
-import { TrendingUp } from "lucide-react";
+import TransacoesRecentes from "@/components/TransacoesRecentes";
+import { ITransacao } from "@/interfaces/transacao";
+import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const [transacao, setTransacao] = useState<TUsuarios[]>([]);
+  const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+
+  const totalReceitas = transacoes
+    .filter((t) => t.tp_transacao.toLowerCase() === "receita")
+    .reduce((acc, t) => acc + t.vl_transacao, 0);
+
+  const totalDespesas = transacoes
+    .filter((t) => t.tp_transacao.toLowerCase() === "saída")
+    .reduce((acc, t) => acc + Math.abs(t.vl_transacao), 0);
+
+  const saldoFinal = totalReceitas - totalDespesas;
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
 
   useEffect(() => {
     async function fetchTransacao() {
@@ -28,8 +46,7 @@ export default function Dashboard() {
         }
 
         const data = await res.json();
-        console.log("Dados recebidos:", data);
-        setTransacao(data);
+        setTransacoes(data);
       } catch (err) {
         console.error("Erro ao buscar transações:", err);
         setError(err instanceof Error ? err.message : "Erro desconhecido");
@@ -48,11 +65,45 @@ export default function Dashboard() {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatusCard
           title="Receita Total"
-          value="24.850,00"
+          value={formatCurrency(totalReceitas)}
           prefix="R$"
-          subtitle="Este mês"
-          change={{ value: "+12,5%", positive: true }}
+          subtitle="Total de receitas"
+          change={{
+            value: `${
+              transacoes.filter(
+                (t) => t.tp_transacao.toLowerCase() === "receita"
+              ).length
+            } transações`,
+            positive: true,
+          }}
           icon={TrendingUp}
+        />
+
+        <StatusCard
+          title="Despesas Total"
+          value={formatCurrency(totalDespesas)}
+          prefix="R$"
+          subtitle="Total de despesas"
+          change={{
+            value: `${
+              transacoes.filter((t) => t.tp_transacao.toLowerCase() === "saída")
+                .length
+            } transações`,
+            positive: false,
+          }}
+          icon={TrendingDown}
+        />
+
+        <StatusCard
+          title="Saldo Final"
+          value={formatCurrency(Math.abs(saldoFinal))}
+          prefix="R$"
+          subtitle={saldoFinal >= 0 ? "Superávit" : "Déficit"}
+          change={{
+            value: saldoFinal >= 0 ? "Positivo" : "Negativo",
+            positive: saldoFinal >= 0,
+          }}
+          icon={Wallet}
         />
       </section>
 
@@ -69,22 +120,18 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="mt-6 overflow-x-auto">
-            {transacao.length === 0 ? (
+            {!transacoes || transacoes.length === 0 ? (
               <p className="text-center py-4 text-gray-500">
                 Nenhuma transação cadastrada.
               </p>
             ) : (
               <div className="space-y-2">
-                {transacao.map((usuario, index) => (
-                  <div
-                    key={usuario.id || index}
-                    className="p-4 bg-white rounded-lg border border-gray-200"
-                  >
-                    <pre className="text-sm">
-                      {JSON.stringify(usuario, null, 2)}
-                    </pre>
-                  </div>
-                ))}
+                <section>
+                  <TransacoesRecentes
+                    transacoes={transacoes}
+                    titulo="Transações Recentes"
+                  />
+                </section>
               </div>
             )}
           </div>
