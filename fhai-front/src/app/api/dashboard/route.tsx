@@ -13,3 +13,25 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const resp = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}api/transacao`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
+    const data = await resp.json();
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error("Erro ao criar transação", err);
+    return NextResponse.json(
+      { error: "Falha ao criar transação" },
+      { status: 500 }
+    );
+  }
+}

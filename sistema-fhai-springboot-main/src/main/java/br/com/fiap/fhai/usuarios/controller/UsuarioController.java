@@ -1,11 +1,9 @@
 package br.com.fiap.fhai.usuarios.controller;
 
-import br.com.fiap.fhai.endereco.model.Endereco;
 import br.com.fiap.fhai.usuarios.model.Usuario;
 import br.com.fiap.fhai.usuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,24 +49,6 @@ public class UsuarioController {
     @ResponseStatus(HttpStatus.OK)
     public Usuario atualizar(@PathVariable int id, @RequestBody Usuario usuario) {
         return usuarioService.atualizar(id, usuario);
-    }
-
-    @PostMapping("/{id}/endereco")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Usuario cadastrarEndereco(@PathVariable int id, @RequestBody Endereco endereco){
-        return  usuarioService.cadastrarEndereco(id, endereco);
-    }
-
-    @PutMapping("/{id}/endereco")
-    @ResponseStatus(HttpStatus.OK)
-    public Usuario atualizarEndereco(@PathVariable int id, @RequestBody Endereco endereco) {
-        return usuarioService.atualizarEndereco(id, endereco);
-    }
-
-    @GetMapping("/{id}/endereco")
-    @ResponseStatus(HttpStatus.OK)
-    public Endereco buscarEndereco(@PathVariable int id){
-        return usuarioService.buscarEndereco(id);
     }
 }
 

@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transacao")
+@RequestMapping("/api/usuario/{idUsuario}/transacoes")
 @CrossOrigin(
         origins = "http://localhost:3000",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
         allowedHeaders = "*",
         allowCredentials = "true"
 )
@@ -23,32 +22,44 @@ public class TransacaoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Transacao cadastrar(@RequestBody Transacao transacao){
-        return  transacaoService.cadastrar(transacao);
-
+    public Transacao cadastrar(
+            @PathVariable Long idUsuario,
+            @RequestBody Transacao transacao
+    ) {
+        return transacaoService.cadastrar(idUsuario, transacao);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Transacao> buscarTodos(){
-        return transacaoService.buscarTodos();
+    public List<Transacao> buscarTodos(@PathVariable Long idUsuario) {
+        return transacaoService.buscarTodosPorUsuario(idUsuario);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{idTransacao}")
     @ResponseStatus(HttpStatus.OK)
-    public Transacao buscarPorId(@PathVariable int id){
-        return transacaoService.buscarPorId(id);
+    public Transacao buscarPorId(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idTransacao
+    ) {
+        return transacaoService.buscarPorId(idUsuario, idTransacao);
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/{idTransacao}")
+    @ResponseStatus(HttpStatus.OK)
+    public Transacao atualizar(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idTransacao,
+            @RequestBody Transacao transacao
+    ) {
+        return transacaoService.atualizar(idUsuario, idTransacao, transacao);
+    }
+
+    @DeleteMapping("/{idTransacao}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable int id ){
-        transacaoService.excluir(id);
-    }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Transacao atualizar (@PathVariable int id, @RequestBody Transacao transacao){
-        return transacaoService.atualizar(id, transacao);
+    public void excluir(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idTransacao
+    ) {
+        transacaoService.excluir(idUsuario, idTransacao);
     }
 }
