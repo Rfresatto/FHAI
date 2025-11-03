@@ -1,6 +1,7 @@
 package br.com.fiap.fhai.endereco.model;
 
 import br.com.fiap.fhai.usuarios.model.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +27,11 @@ public class Endereco {
     private String estado;
     @Column(name = "REFERENCIA")
     private String referencia;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    @JsonBackReference
+    private Usuario usuario;
 
     // Construtores
     public Endereco() {
@@ -104,6 +110,14 @@ public class Endereco {
 
     public void setReferencia(String referencia) {
         this.referencia = referencia;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getEnderecoCompleto() {

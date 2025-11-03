@@ -1,6 +1,7 @@
 package br.com.fiap.fhai.transacao.model;
 
-import br.com.fiap.fhai.cartao.model.Cartao;
+import br.com.fiap.fhai.usuarios.model.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,7 +12,8 @@ public class Transacao {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TRANSACOES")
     @SequenceGenerator(name = "SEQ_TRANSACOES", sequenceName = "SEQ_TRANSACOES", allocationSize = 1)
-    private int id_transacao;
+    @Column(name = "id_transacao")
+    private int id;
     private String nm_transacao;
     private String ds_transacao;
     private float vl_transacao;
@@ -19,28 +21,30 @@ public class Transacao {
     private Date dt_transacao;
 
     @ManyToOne
-    @JoinColumn(name = "ID_CARTAO")
-    private Cartao cartao;
+    @JoinColumn(name = "ID_USUARIO", nullable = false)
+    @JsonBackReference
+    private Usuario usuario;
+
 
     public Transacao() {
     }
 
-    public Transacao(int id_transacao, String nm_transacao, String ds_transacao, float vl_transacao, String tp_transacao, Cartao cartao, Date dt_transacao) {
-        this.id_transacao = id_transacao;
+    public Transacao(int id, String nm_transacao, String ds_transacao, float vl_transacao, String tp_transacao, Usuario usuario, Date dt_transacao) {
+        this.id = id;
         this.nm_transacao = nm_transacao;
         this.ds_transacao = ds_transacao;
         this.vl_transacao = vl_transacao;
         this.tp_transacao = tp_transacao;
-        this.cartao = cartao;
+        this.usuario = usuario;
         this.dt_transacao = dt_transacao;
     }
 
-    public int getId_transacao() {
-        return id_transacao;
+    public int getId() {
+        return id;
     }
 
-    public void setId_transacao(int id_transacao) {
-        this.id_transacao = id_transacao;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNm_transacao() {
@@ -75,12 +79,12 @@ public class Transacao {
         this.tp_transacao = tp_transacao;
     }
 
-    public Cartao getCartao() {
-        return cartao;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCartao(Cartao cartao) {
-        this.cartao = cartao;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public Date getDt_transacao() {

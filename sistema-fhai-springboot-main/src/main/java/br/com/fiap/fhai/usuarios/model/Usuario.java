@@ -1,8 +1,12 @@
 package br.com.fiap.fhai.usuarios.model;
 
-import br.com.fiap.fhai.contaBancaria.model.ContaBancaria;
 import br.com.fiap.fhai.endereco.model.Endereco;
+import br.com.fiap.fhai.transacao.model.Transacao;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "T_FHAI_USUARIOS")
@@ -29,13 +33,14 @@ public class Usuario {
     @Column(name = "NR_CONTATO")
     private long contato;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ID_ENDERECO")
-    private Endereco endereco;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Endereco> enderecos;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ID_CONTA")
-    private ContaBancaria contaBancaria;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Transacao> transacoes = new ArrayList<>();
+
 
     public Usuario() {}
 
@@ -95,19 +100,19 @@ public class Usuario {
         this.contato = contato;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public List<Endereco> getEnderecos() {
+        return enderecos;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
     }
 
-    public ContaBancaria getContaBancaria() {
-        return contaBancaria;
+    public List<Transacao> getTransacoes() {
+        return transacoes;
     }
 
-    public void setContaBancaria(ContaBancaria contaBancaria) {
-        this.contaBancaria = contaBancaria;
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
     }
 }

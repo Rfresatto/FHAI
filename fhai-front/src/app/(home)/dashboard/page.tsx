@@ -1,15 +1,20 @@
 "use client";
+import ModalAddTransacao from "@/components/(features)/ModalAddTransacao";
 import Header from "@/components/Header";
 import { StatusCard } from "@/components/StatusCard";
-import TransacoesRecentes from "@/components/TransacoesRecentes";
+import Transacao from "@/components/Transacao";
+import BoxTransacao from "@/components/TransacoesRecentes";
 import { ITransacao } from "@/interfaces/transacao";
-import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import { Plus, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [openAddModalTransacao, setOpenAddModalTransacao] = useState(false);
+  const [openEditModalTransacao, setOpenEditModalTransacao] =
+    useState<ITransacao | null>(null);
 
   const totalReceitas = transacoes
     .filter((t) => t.tp_transacao.toLowerCase() === "receita")
@@ -28,33 +33,60 @@ export default function Dashboard() {
     }).format(value);
   };
 
-  useEffect(() => {
-    async function fetchTransacao() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}api/transacao`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`Erro na API: ${res.status} - ${res.statusText}`);
+  const fetchTransacao = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}api/transacao`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
+      );
 
-        const data = await res.json();
-        setTransacoes(data);
-      } catch (err) {
-        console.error("Erro ao buscar transações:", err);
-        setError(err instanceof Error ? err.message : "Erro desconhecido");
-      } finally {
-        setLoading(false);
+      if (!res.ok) {
+        throw new Error(`Erro na API: ${res.status} - ${res.statusText}`);
       }
-    }
 
+      const data = await res.json();
+      setTransacoes(data);
+    } catch (err) {
+      console.error("Erro ao buscar transações:", err);
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeletar = async (id: number) => {
+    if (!confirm("Tem certeza que desaja excluir essa transação?")) return;
+
+    try {
+      const resp = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}api/transacao/${id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        alert(data.message || "Erro ao excluir a transação");
+        return;
+      }
+
+      fetchTransacao();
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Erro ao executar comando";
+      alert(message || "Erro ao excluir produto");
+    }
+  };
+
+  useEffect(() => {
     fetchTransacao();
   }, []);
 
@@ -127,16 +159,40 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-2">
                 <section>
-                  <TransacoesRecentes
-                    transacoes={transacoes}
-                    titulo="Transações Recentes"
-                  />
+                  <BoxTransacao titulo="Transações Recentes">
+                    {transacoes.map((transacao) => (
+                      <Transacao
+                        key={transacao.id}
+                        transacao={transacao}
+                        onDeletar={() => handleDeletar}
+                        onEditar={() => {
+                          setOpenEditModalTransacao(transacao);
+                        }}
+                      />
+                    ))}
+                  </BoxTransacao>
                 </section>
               </div>
             )}
           </div>
         )}
       </section>
+
+      <button
+        onClick={() => setOpenAddModalTransacao(true)}
+        className="fixed bottom-8 right-8 w-14 h-14 bg-teal-500 hover:bg-teal-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group"
+        title="Adicionar transação"
+      >
+        <Plus
+          size={24}
+          className="group-hover:rotate-90 transition-transform"
+        />
+      </button>
+
+      <ModalAddTransacao
+        isOpen={openAddModalTransacao}
+        onClose={() => setOpenAddModalTransacao(false)}
+      />
     </main>
   );
 }
