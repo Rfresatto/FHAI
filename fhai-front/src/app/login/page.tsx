@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setSenha] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
@@ -14,25 +14,29 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    if (!email || !password) {
-      setError("Por favor, preencha todos os campos");
-    }
-
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        }
+      );
 
-      if (!res.ok) {
-        const body = await res.json();
-        throw new Error(body.message || "Falha na autenticação");
+      if (response.ok) {
+        const usuario = await response.json();
+        localStorage.setItem("token", usuario.token);
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+        setTimeout(() => {
+          router.push(`dashboard/${usuario.id}`);
+        }, 500);
+        return usuario;
+      } else {
+        const erro = await response.json();
+        console.error("Erro no login:", erro.mensagem);
+        return null;
       }
-
-      const data = await res.json();
-      localStorage.setItem("admin_token", data.token);
-      router.push("/dashboard");
     } catch (err: unknown) {
       setError((err as Error).message);
     }
@@ -54,21 +58,20 @@ export default function LoginPage() {
     alert("Criar conta");
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("admin_token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    router.push("/dashboard");
-  }, [router]);
+  // useEffect(() => {
+  //   const usuario = localStorage.getItem("usuario");
+  //   if (!usuario) {
+  //     router.push(`dashboard/${usuario.id}`);
+  //     return;
+  //   }
+  // }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5">
       <div className="relative rounded-3xl p-12 w-full max-w-md shadow-2xl">
-        <div className="text-center mb-10 justify-items-center">
+        <div className="flex flex-col items-center text-center mb-10 w-full">
           <h2 className="text-black text-lg font-medium mb-2">Welcome to</h2>
-          <Image src="/assets/icon.png" alt="icon" width={200} height={200} />
+          <Image src="/assets/icon.png" alt="icon" width={150} height={150} />
           <p className="text-black text-base font-medium leading-relaxed">
             Your smart financial
             <br />
@@ -93,8 +96,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 className="w-full px-5 py-4 rounded-xl bg-white bg-opacity-80 text-gray-800 text-base focus:outline-none focus:bg-white focus:shadow-lg transition-all duration-300"
                 required
               />

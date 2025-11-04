@@ -4,16 +4,17 @@ import { useSidebar } from "@/context/SidebarContext";
 import { LayoutDashboard, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Settings, label: "Configurações", href: "/configuracao" },
-];
+import { useParams, usePathname } from "next/navigation";
 
 export default function Sidebar() {
+  const { id } = useParams();
   const pathname = usePathname();
   const { isCollapsed } = useSidebar();
+
+  const menuItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: `/dashboard/${id}` },
+    { icon: Settings, label: "Configurações", href: `${id}/configuracao` },
+  ];
 
   return (
     <aside

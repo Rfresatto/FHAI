@@ -9,12 +9,15 @@ import { Plus, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+  const [usuario, setUsuario] = useState<{
+    id: number;
+    name: string;
+    token: string;
+  }>();
   const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const [openAddModalTransacao, setOpenAddModalTransacao] = useState(false);
-  const [openEditModalTransacao, setOpenEditModalTransacao] =
-    useState<ITransacao | null>(null);
 
   const totalReceitas = transacoes
     .filter((t) => t.tp_transacao.toLowerCase() === "receita")
@@ -33,29 +36,30 @@ export default function Dashboard() {
     }).format(value);
   };
 
-  const fetchTransacao = async () => {
+  const buscarTransacoes = async (idUsuario: number) => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}api/transacao`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${idUsuario}/transacoes`,
         {
           method: "GET",
           headers: {
+            Authorization: `Bearer ${usuario}`,
             "Content-Type": "application/json",
           },
         }
       );
 
-      if (!res.ok) {
-        throw new Error(`Erro na API: ${res.status} - ${res.statusText}`);
+      if (response.ok) {
+        setLoading(false);
+        return await response.json();
+      } else {
+        setError("Erro ao buscar transações");
+        console.error("Erro ao buscar transações");
+        return [];
       }
-
-      const data = await res.json();
-      setTransacoes(data);
-    } catch (err) {
-      console.error("Erro ao buscar transações:", err);
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("Erro:", error);
+      return [];
     }
   };
 
@@ -77,8 +81,6 @@ export default function Dashboard() {
         alert(data.message || "Erro ao excluir a transação");
         return;
       }
-
-      fetchTransacao();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Erro ao executar comando";
@@ -87,8 +89,24 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    fetchTransacao();
+    const usuarioLocal = localStorage.getItem("usuario");
+    if (usuarioLocal) {
+      const data = JSON.parse(usuarioLocal);
+      queueMicrotask(() => setUsuario(data));
+    }
   }, []);
+
+  useEffect(() => {
+    if (!usuario?.id) return;
+
+    const loadTransacoes = async () => {
+      const data = await buscarTransacoes(usuario.id);
+      setTransacoes(data);
+      setLoading(false);
+    };
+
+    loadTransacoes();
+  }, [usuario]);
 
   return (
     <main className="container mx-auto p-4">
@@ -165,9 +183,7 @@ export default function Dashboard() {
                         key={transacao.id}
                         transacao={transacao}
                         onDeletar={() => handleDeletar}
-                        onEditar={() => {
-                          setOpenEditModalTransacao(transacao);
-                        }}
+                        onEditar={() => {}}
                       />
                     ))}
                   </BoxTransacao>
