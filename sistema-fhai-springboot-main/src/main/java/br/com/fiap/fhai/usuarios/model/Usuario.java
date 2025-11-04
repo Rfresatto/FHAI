@@ -41,7 +41,6 @@ public class Usuario {
     @JsonManagedReference
     private List<Transacao> transacoes = new ArrayList<>();
 
-
     public Usuario() {}
 
     public Usuario(String nome, String senha, String sexo, String email, long contato) {
