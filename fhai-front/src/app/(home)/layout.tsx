@@ -13,7 +13,7 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("admin_token");
+    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
     }
