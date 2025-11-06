@@ -1,6 +1,5 @@
 "use client";
 import Header from "@/components/Header";
-import { TUsuarios } from "@/interfaces/usuario";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCamera, FaMapMarkerAlt, FaUser } from "react-icons/fa";

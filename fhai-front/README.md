@@ -134,7 +134,7 @@ npm install
 ### 3. Configure o arquivo `.env`
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:8080/
 ```
 
 ### 4. Execute o frontend
