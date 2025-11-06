@@ -29,7 +29,6 @@ export default function ConfiguracoesPage() {
   const [loading, setLoading] = useState(false);
   const [usuario, setUsuario] = useState(undefined);
 
-  // Estados do Perfil
   const [formPerfilData, setFormPerfilData] = useState({
     nome: "",
     senha: "",
@@ -38,7 +37,6 @@ export default function ConfiguracoesPage() {
     contato: "",
   });
 
-  // Estados do Endereço
   const [formEnderecoData, setFormEnderecoData] = useState({
     id: "",
     logradouro: "",
@@ -96,10 +94,10 @@ export default function ConfiguracoesPage() {
     e.preventDefault();
     setLoading(true);
 
-    if (formEnderecoData.id) {
+    if (formEnderecoData?.id) {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${id}/endereco/${formEnderecoData.id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${id}/endereco/${formEnderecoData?.id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -109,8 +107,11 @@ export default function ConfiguracoesPage() {
         if (!response.ok) {
           console.error("Erro na chamada");
         }
+
+        setLoading(false);
+        alert("Endereço atualizado com sucesso!");
       } catch (error) {
-        console.error("Erro ao criar o Endereço", error);
+        console.error("Erro ao atualizado o Endereço", error);
       }
     } else {
       try {
@@ -125,6 +126,9 @@ export default function ConfiguracoesPage() {
         if (!response.ok) {
           console.error("Erro na chamada");
         }
+
+        setLoading(false);
+        alert("Endereço criado com sucesso!");
       } catch (error) {
         console.error("Erro ao criar o Endereço", error);
       }
@@ -164,7 +168,7 @@ export default function ConfiguracoesPage() {
             email: data.email,
             contato: data.contato,
             sexo: data.sexo,
-            senha: "",
+            senha: data.senha,
           });
 
           localStorage.setItem(
@@ -196,14 +200,14 @@ export default function ConfiguracoesPage() {
 
           const data = await response.json();
           setFormEnderecoData({
-            id: data.enderecos[0].id ?? "",
-            logradouro: data.enderecos[0].logradouro ?? "",
-            nr_residencia: data.enderecos[0].nr_residencia ?? "",
-            complemento: data.enderecos[0].complemento ?? "",
-            cep: data.enderecos[0].cep ?? "",
-            cidade: data.enderecos[0].cidade ?? "",
-            estado: data.enderecos[0].estado ?? "",
-            referencia: data.enderecos[0].referencia ?? "",
+            id: data.enderecos[0]?.id ?? "",
+            logradouro: data.enderecos[0]?.logradouro ?? "",
+            nr_residencia: data.enderecos[0]?.nr_residencia ?? "",
+            complemento: data.enderecos[0]?.complemento ?? "",
+            cep: data.enderecos[0]?.cep ?? "",
+            cidade: data.enderecos[0]?.cidade ?? "",
+            estado: data.enderecos[0]?.estado ?? "",
+            referencia: data.enderecos[0]?.referencia ?? "",
           });
         } catch (error) {
           console.error("Erro ao carregar endereco:", error);
@@ -298,7 +302,6 @@ export default function ConfiguracoesPage() {
 
               <form onSubmit={handleSalvarPerfil}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Nome completo - ocupa 2 colunas */}
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Nome completo
@@ -317,7 +320,6 @@ export default function ConfiguracoesPage() {
                     />
                   </div>
 
-                  {/* Email */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Email
@@ -336,7 +338,6 @@ export default function ConfiguracoesPage() {
                     />
                   </div>
 
-                  {/* Telefone */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Telefone
@@ -356,7 +357,6 @@ export default function ConfiguracoesPage() {
                     />
                   </div>
 
-                  {/* Sexo */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Sexo
@@ -381,7 +381,6 @@ export default function ConfiguracoesPage() {
                     </select>
                   </div>
 
-                  {/* Senha */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Senha
@@ -427,7 +426,6 @@ export default function ConfiguracoesPage() {
 
               <form onSubmit={handleSalvarEndereco}>
                 <div className="grid grid-cols-1 gap-6">
-                  {/* Logradouro + Número */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Endereço (Logradouro)
@@ -484,7 +482,6 @@ export default function ConfiguracoesPage() {
                     </div>
                   </div>
 
-                  {/* Cidade + Estado + CEP */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -545,7 +542,6 @@ export default function ConfiguracoesPage() {
                     </div>
                   </div>
 
-                  {/* Referência */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Referência
