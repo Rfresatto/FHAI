@@ -1,20 +1,32 @@
 "use client";
-
 import { useSidebar } from "@/context/SidebarContext";
-import { LayoutDashboard, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { IoSettingsSharp } from "react-icons/io5";
+import { MdOutlineDashboard, MdLogout } from "react-icons/md";
 
 export default function Sidebar() {
   const { id } = useParams();
   const pathname = usePathname();
+  const router = useRouter();
   const { isCollapsed } = useSidebar();
 
   const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: `/dashboard/${id}` },
-    { icon: Settings, label: "Configurações", href: `${id}/configuracao` },
+    { icon: MdOutlineDashboard, label: "Dashboard", href: `/dashboard/${id}` },
+    {
+      icon: IoSettingsSharp,
+      label: "Configurações",
+      href: `${id}/configuracao`,
+    },
   ];
+
+  const handleLogout = () => {
+    if (confirm("Deseja realmente sair?")) {
+      localStorage.removeItem("usuario");
+      router.push("/login");
+    }
+  };
 
   return (
     <aside
@@ -53,7 +65,6 @@ export default function Sidebar() {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
-
             return (
               <li key={item.href}>
                 <Link
@@ -77,6 +88,22 @@ export default function Sidebar() {
           })}
         </ul>
       </nav>
+
+      {/* Botão de Logout no rodapé */}
+      <div className="p-4 border-t border-gray-200">
+        <button
+          onClick={handleLogout}
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-red-600 hover:bg-red-50 ${
+            isCollapsed ? "justify-center" : ""
+          }`}
+          title={isCollapsed ? "Sair" : undefined}
+        >
+          <MdLogout size={20} className="shrink-0" />
+          {!isCollapsed && (
+            <span className="font-medium text-sm whitespace-nowrap">Sair</span>
+          )}
+        </button>
+      </div>
     </aside>
   );
 }

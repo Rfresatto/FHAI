@@ -1,5 +1,7 @@
 import { ITransacao } from "@/interfaces/transacao";
-import { Edit2, Trash2, TrendingDown, TrendingUp } from "lucide-react";
+import { FaTrash } from "react-icons/fa";
+import { IoIosTrendingDown, IoIosTrendingUp } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
 
 interface TransacoesProps {
   transacao: ITransacao;
@@ -16,33 +18,21 @@ const Transacao = ({ transacao, onDeletar, onEditar }: TransacoesProps) => {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+    const normalizarData = (data: Date) => {
+      return new Date(data.getFullYear(), data.getMonth(), data.getDate() + 1);
+    };
 
-    if (date.toDateString() === today.toDateString()) {
-      return "Hoje";
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Ontem";
-    } else {
-      const diffTime = Math.abs(today.getTime() - date.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const date = normalizarData(new Date(dateString));
 
-      if (diffDays < 7) {
-        return `${diffDays} dias atrás`;
-      }
-
-      return date.toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    }
+    return date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
   const isReceita = transacao.tp_transacao.toLowerCase() === "receita";
-  const Icon = isReceita ? TrendingUp : TrendingDown;
+  const Icon = isReceita ? IoIosTrendingUp : IoIosTrendingDown;
   const bgColor = isReceita ? "bg-teal-100" : "bg-red-100";
   const iconColor = isReceita ? "text-teal-600" : "text-red-600";
   const valorColor = isReceita ? "text-teal-600" : "text-red-600";
@@ -78,10 +68,10 @@ const Transacao = ({ transacao, onDeletar, onEditar }: TransacoesProps) => {
               {formatCurrency(Math.abs(transacao.vl_transacao))}
             </span>
             <span className="cursor-pointer text-blue-500" onClick={() => {}}>
-              <Edit2 onClick={onEditar} />
+              <MdEdit onClick={onEditar} />
             </span>
             <span className="cursor-pointer text-red-400" onClick={() => {}}>
-              <Trash2 onClick={onDeletar} />
+              <FaTrash onClick={onDeletar} />
             </span>
           </div>
         </div>

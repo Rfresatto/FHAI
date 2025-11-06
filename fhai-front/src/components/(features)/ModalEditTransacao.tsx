@@ -1,19 +1,21 @@
 import { ITransacao } from "@/interfaces/transacao";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TbXboxX } from "react-icons/tb";
 
-interface ModalAdicionarTransacaoProps {
+interface ModalEditarTransacaoProps {
   isOpen: boolean;
   onClose: () => void;
+  transacao: ITransacao | null;
   onSuccess?: () => void;
 }
 
-export default function ModalAddTransacao({
+export default function ModalEditarTransacao({
   isOpen,
   onClose,
+  transacao,
   onSuccess,
-}: ModalAdicionarTransacaoProps) {
+}: ModalEditarTransacaoProps) {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     nm_transacao: "",
@@ -21,45 +23,60 @@ export default function ModalAddTransacao({
     vl_transacao: "",
     tp_transacao: "receita",
     dt_transacao: new Date().toISOString().split("T")[0],
-    cartao: null,
   });
+
+  useEffect(() => {
+    if (transacao) {
+      setFormData({
+        nm_transacao: transacao.nm_transacao,
+        ds_transacao: transacao.ds_transacao || "",
+        vl_transacao: transacao.vl_transacao.toString(),
+        tp_transacao: transacao.tp_transacao,
+        dt_transacao: transacao.dt_transacao
+          ? new Date(transacao.dt_transacao).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
+      });
+    }
+  }, [transacao]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const novaTransacao: ITransacao = {
-        nm_transacao: formData.nm_transacao,
-        ds_transacao: formData.ds_transacao,
-        vl_transacao: parseFloat(formData.vl_transacao),
-        tp_transacao: formData.tp_transacao,
-        dt_transacao: new Date(formData.dt_transacao).toISOString(),
-      };
+    if (!transacao?.id) return;
 
+    const transacaoAtualizada: ITransacao = {
+      id: transacao.id,
+      nm_transacao: formData.nm_transacao,
+      ds_transacao: formData.ds_transacao,
+      vl_transacao: parseFloat(formData.vl_transacao),
+      tp_transacao: formData.tp_transacao,
+      dt_transacao: new Date(formData.dt_transacao).toISOString(),
+    };
+
+    try {
       const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${id}/transacoes`,
+        `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${id}/transacoes/${transacao.id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(novaTransacao),
+          body: JSON.stringify(transacaoAtualizada),
         }
       );
 
       if (!resp.ok) {
         const errorData = await resp.text();
         console.error("Erro da API:", errorData);
-        throw new Error(`Erro ao criar transação: ${resp.status}`);
+        throw new Error(`Erro ao atualizar transação: ${resp.status}`);
       }
-
       if (onSuccess) {
         onSuccess();
       }
+
       handleClose();
     } catch (error) {
-      console.error("Erro ao adicionar:", error);
-      alert("Erro ao adicionar transação. Verifique o console.");
+      console.error("Erro ao atualizar:", error);
     }
   };
 
@@ -70,20 +87,20 @@ export default function ModalAddTransacao({
       vl_transacao: "",
       tp_transacao: "receita",
       dt_transacao: new Date().toISOString().split("T")[0],
-      cartao: null,
     });
+
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !transacao) return null;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <span className="text-teal-500">+</span>
-            Adicionar Transação
+            <span className="text-blue-500">✏️</span>
+            Editar Transação
           </h2>
           <button
             onClick={handleClose}
@@ -186,15 +203,15 @@ export default function ModalAddTransacao({
             <button
               type="button"
               onClick={handleClose}
-              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center justify-center gap-2"
             >
-              Adicionar
+              Salvar Alterações
             </button>
           </div>
         </form>

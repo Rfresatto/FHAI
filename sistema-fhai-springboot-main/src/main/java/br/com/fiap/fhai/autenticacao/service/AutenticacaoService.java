@@ -13,45 +13,15 @@ public class AutenticacaoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
     public UsuarioResponse autenticar(LoginRequest loginRequest) {
         Usuario usuario = usuarioRepository
                 .findByEmailAndSenha(loginRequest.getEmail(), loginRequest.getSenha())
                 .orElseThrow(() -> new RuntimeException("Email ou senha inválidos!"));
 
-        String token = jwtUtil.gerarToken(usuario.getId(), usuario.getEmail(), usuario.getNome());
-
+        // Converte Usuario para UsuarioResponse (sem senha)
         return new UsuarioResponse(
                 usuario.getId(),
-                usuario.getNome(),
-                token
+                usuario.getNome()
         );
-    }
-
-    public boolean validarToken(String token) {
-        try {
-            String email = jwtUtil.extrairEmail(token);
-            return !jwtUtil.tokenExpirado(token);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public UsuarioResponse obterUsuarioPorToken(String token) {
-        try {
-            Integer userId = jwtUtil.extrairUserId(token);
-            Usuario usuario = usuarioRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-
-            return new UsuarioResponse(
-                    usuario.getId(),
-                    usuario.getNome(),
-                    token
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Token inválido!");
-        }
     }
 }

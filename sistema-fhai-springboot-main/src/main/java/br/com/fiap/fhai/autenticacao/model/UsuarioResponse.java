@@ -3,16 +3,18 @@ package br.com.fiap.fhai.autenticacao.model;
 public class UsuarioResponse {
     private int id;
     private String nome;
-    private String token; // Novo campo
+    private String email;
+    private String sexo;
+    private long contato;
 
     public UsuarioResponse() {}
 
-    public UsuarioResponse(int id, String nome, String token) {
+    public UsuarioResponse(int id, String nome) {
         this.id = id;
         this.nome = nome;
-        this.token = token;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -29,12 +31,4 @@ public class UsuarioResponse {
         this.nome = nome;
     }
 
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

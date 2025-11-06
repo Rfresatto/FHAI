@@ -13,8 +13,8 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const user = localStorage.getItem("usuario");
+    if (!user) {
       router.push("/login");
     }
   }, [router]);
