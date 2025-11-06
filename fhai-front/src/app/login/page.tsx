@@ -62,6 +62,7 @@ export default function LoginPage() {
       <div className="relative rounded-3xl p-12 w-full max-w-md shadow-2xl">
         <div className="flex flex-col items-center text-center mb-10 w-full">
           <h2 className="text-black text-lg font-medium mb-2">Welcome to</h2>
+          <h1 className="text-black text-lg font-medium mb-2">FHAI</h1>
           <Image src="/assets/icon.png" alt="icon" width={150} height={150} />
           <p className="text-black text-base font-medium leading-relaxed">
             Your smart financial
