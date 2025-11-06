@@ -1,112 +1,157 @@
 "use client";
 import ModalAddTransacao from "@/components/(features)/ModalAddTransacao";
+import ModalEditarTransacao from "@/components/(features)/ModalEditTransacao";
 import Header from "@/components/Header";
 import { StatusCard } from "@/components/StatusCard";
 import Transacao from "@/components/Transacao";
 import BoxTransacao from "@/components/TransacoesRecentes";
 import { ITransacao } from "@/interfaces/transacao";
-import { Plus, TrendingDown, TrendingUp, Wallet } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { LuTrendingDown, LuTrendingUp, LuWallet } from "react-icons/lu";
 
 export default function Dashboard() {
-  const [usuario, setUsuario] = useState<{
-    id: number;
-    name: string;
-    token: string;
-  }>();
   const [transacoes, setTransacoes] = useState<ITransacao[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [openAddModalTransacao, setOpenAddModalTransacao] = useState(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const [transacaoSelecionada, setTransacaoSelecionada] =
+    useState<ITransacao | null>(null);
+  const { id } = useParams();
 
-  const totalReceitas = transacoes
-    .filter((t) => t.tp_transacao.toLowerCase() === "receita")
-    .reduce((acc, t) => acc + t.vl_transacao, 0);
-
-  const totalDespesas = transacoes
-    .filter((t) => t.tp_transacao.toLowerCase() === "saída")
-    .reduce((acc, t) => acc + Math.abs(t.vl_transacao), 0);
-
-  const saldoFinal = totalReceitas - totalDespesas;
-
-  const formatCurrency = (value: number) => {
+  const formatCurrency = useCallback((value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
-  };
+  }, []);
 
-  const buscarTransacoes = async (idUsuario: number) => {
+  const transacoesPorTipo = useMemo(() => {
+    const receitas = transacoes.filter(
+      (t) => t.tp_transacao.toLowerCase() === "receita"
+    );
+    const despesas = transacoes.filter(
+      (t) => t.tp_transacao.toLowerCase() === "despesa"
+    );
+    return { receitas, despesas };
+  }, [transacoes]);
+
+  const totais = useMemo(() => {
+    const totalReceitas = transacoesPorTipo.receitas.reduce(
+      (acc, t) => acc + t.vl_transacao,
+      0
+    );
+    const totalDespesas = transacoesPorTipo.despesas.reduce(
+      (acc, t) => acc + Math.abs(t.vl_transacao),
+      0
+    );
+    const saldoFinal = totalReceitas - totalDespesas;
+    return { totalReceitas, totalDespesas, saldoFinal };
+  }, [transacoesPorTipo]);
+
+  const contadores = useMemo(
+    () => ({
+      receitas: transacoesPorTipo.receitas.length,
+      despesas: transacoesPorTipo.despesas.length,
+    }),
+    [transacoesPorTipo]
+  );
+
+  const buscarTransacoes = useCallback(async (idUsuario: number) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${idUsuario}/transacoes`,
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${usuario}`,
             "Content-Type": "application/json",
           },
         }
       );
 
       if (response.ok) {
-        setLoading(false);
-        return await response.json();
+        const data = await response.json();
+        return data;
       } else {
-        setError("Erro ao buscar transações");
-        console.error("Erro ao buscar transações");
-        return [];
+        throw new Error("Erro ao buscar transações");
       }
     } catch (error) {
       console.error("Erro:", error);
-      return [];
-    }
-  };
-
-  const handleDeletar = async (id: number) => {
-    if (!confirm("Tem certeza que desaja excluir essa transação?")) return;
-
-    try {
-      const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}api/transacao/${id}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      const data = await resp.json();
-
-      if (!resp.ok) {
-        alert(data.message || "Erro ao excluir a transação");
-        return;
-      }
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Erro ao executar comando";
-      alert(message || "Erro ao excluir produto");
-    }
-  };
-
-  useEffect(() => {
-    const usuarioLocal = localStorage.getItem("usuario");
-    if (usuarioLocal) {
-      const data = JSON.parse(usuarioLocal);
-      queueMicrotask(() => setUsuario(data));
+      throw error;
     }
   }, []);
 
+  const deletarTransacao = async (idTransacao: number) => {
+    if (!confirm("Deseja realmente excluir esta transação?")) return;
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}api/usuario/${id}/transacoes/${idTransacao}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        alert("Transação excluída com sucesso!");
+
+        if (id) {
+          setLoading(true);
+          setError("");
+          try {
+            const data = await buscarTransacoes(Number(id));
+            setTransacoes(data);
+          } catch (error) {
+            console.error(error);
+
+            setError("Erro ao recarregar transações");
+          } finally {
+            setLoading(false);
+          }
+        }
+      } else {
+        throw new Error("Erro ao deletar transação");
+      }
+    } catch (error) {
+      console.error("Erro ao deletar:", error);
+      alert("Erro ao deletar transação");
+    }
+  };
+
   useEffect(() => {
-    if (!usuario?.id) return;
+    if (!id) return;
+
+    let isMounted = true;
 
     const loadTransacoes = async () => {
-      const data = await buscarTransacoes(usuario.id);
-      setTransacoes(data);
-      setLoading(false);
+      setLoading(true);
+      setError("");
+
+      try {
+        const data = await buscarTransacoes(Number(id));
+        if (isMounted) {
+          setTransacoes(data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error(error);
+          setError("Erro ao buscar transações");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
     loadTransacoes();
-  }, [usuario]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, buscarTransacoes]);
 
   return (
     <main className="container mx-auto p-4">
@@ -115,45 +160,38 @@ export default function Dashboard() {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatusCard
           title="Receita Total"
-          value={formatCurrency(totalReceitas)}
+          value={formatCurrency(totais.totalReceitas)}
           prefix="R$"
           subtitle="Total de receitas"
           change={{
-            value: `${
-              transacoes.filter(
-                (t) => t.tp_transacao.toLowerCase() === "receita"
-              ).length
-            } transações`,
+            value: `${contadores.receitas} transações`,
             positive: true,
           }}
-          icon={TrendingUp}
+          icon={<LuTrendingUp className="text-teal-500" />}
         />
 
         <StatusCard
           title="Despesas Total"
-          value={formatCurrency(totalDespesas)}
+          value={formatCurrency(totais.totalDespesas)}
           prefix="R$"
           subtitle="Total de despesas"
           change={{
-            value: `${
-              transacoes.filter((t) => t.tp_transacao.toLowerCase() === "saída")
-                .length
-            } transações`,
+            value: `${contadores.despesas} transações`,
             positive: false,
           }}
-          icon={TrendingDown}
+          icon={<LuTrendingDown className="text-red-500" />}
         />
 
         <StatusCard
           title="Saldo Final"
-          value={formatCurrency(Math.abs(saldoFinal))}
+          value={formatCurrency(Math.abs(totais.saldoFinal))}
           prefix="R$"
-          subtitle={saldoFinal >= 0 ? "Superávit" : "Déficit"}
+          subtitle={totais.saldoFinal >= 0 ? "Superávit" : "Déficit"}
           change={{
-            value: saldoFinal >= 0 ? "Positivo" : "Negativo",
-            positive: saldoFinal >= 0,
+            value: totais.saldoFinal >= 0 ? "Positivo" : "Negativo",
+            positive: totais.saldoFinal >= 0,
           }}
-          icon={Wallet}
+          icon={<LuWallet className="text-teal-500" />}
         />
       </section>
 
@@ -182,8 +220,11 @@ export default function Dashboard() {
                       <Transacao
                         key={transacao.id}
                         transacao={transacao}
-                        onDeletar={() => handleDeletar}
-                        onEditar={() => {}}
+                        onDeletar={() => deletarTransacao(transacao.id!)}
+                        onEditar={() => {
+                          setModalEditOpen(true);
+                          setTransacaoSelecionada(transacao);
+                        }}
                       />
                     ))}
                   </BoxTransacao>
@@ -199,7 +240,7 @@ export default function Dashboard() {
         className="fixed bottom-8 right-8 w-14 h-14 bg-teal-500 hover:bg-teal-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group"
         title="Adicionar transação"
       >
-        <Plus
+        <FaPlus
           size={24}
           className="group-hover:rotate-90 transition-transform"
         />
@@ -208,6 +249,45 @@ export default function Dashboard() {
       <ModalAddTransacao
         isOpen={openAddModalTransacao}
         onClose={() => setOpenAddModalTransacao(false)}
+        onSuccess={async () => {
+          if (id) {
+            setLoading(true);
+            setError("");
+            try {
+              const data = await buscarTransacoes(Number(id));
+              setTransacoes(data);
+            } catch (error) {
+              console.error(error);
+              setError("Erro ao recarregar transações");
+            } finally {
+              setLoading(false);
+            }
+          }
+        }}
+      />
+
+      <ModalEditarTransacao
+        isOpen={modalEditOpen}
+        onClose={() => {
+          setModalEditOpen(false);
+          setTransacaoSelecionada(null);
+        }}
+        transacao={transacaoSelecionada}
+        onSuccess={async () => {
+          if (id) {
+            setLoading(true);
+            setError("");
+            try {
+              const data = await buscarTransacoes(Number(id));
+              setTransacoes(data);
+            } catch (error) {
+              console.error(error);
+              setError("Erro ao recarregar transações");
+            } finally {
+              setLoading(false);
+            }
+          }
+        }}
       />
     </main>
   );

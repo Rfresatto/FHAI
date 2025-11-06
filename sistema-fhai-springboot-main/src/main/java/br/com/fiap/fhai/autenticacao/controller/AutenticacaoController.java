@@ -31,18 +31,6 @@ public class AutenticacaoController {
         }
     }
 
-    @GetMapping("/validar")
-    public ResponseEntity<?> validarToken(@RequestHeader("Authorization") String authHeader) {
-        try {
-            String token = authHeader.replace("Bearer ", "");
-            UsuarioResponse usuario = autenticacaoService.obterUsuarioPorToken(token);
-            return ResponseEntity.ok(usuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-    }
-
     static class ErrorResponse {
         private String mensagem;
 

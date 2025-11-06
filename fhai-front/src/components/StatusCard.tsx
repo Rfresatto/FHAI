@@ -1,5 +1,3 @@
-import { LucideIcon } from "lucide-react";
-
 interface StatusCardProps {
   title: string;
   value: string;
@@ -8,7 +6,7 @@ interface StatusCardProps {
     value: string;
     positive?: boolean;
   };
-  icon: LucideIcon;
+  icon: React.ReactElement;
   prefix?: string;
 }
 
@@ -17,7 +15,7 @@ const StatusCard = ({
   value,
   subtitle,
   change,
-  icon: Icon,
+  icon,
   prefix,
 }: StatusCardProps) => {
   return (
@@ -33,9 +31,7 @@ const StatusCard = ({
           </div>
           {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
         </div>
-        <div className="shrink-0">
-          <Icon className="text-teal-500" size={24} />
-        </div>
+        <div className="shrink-0">{icon}</div>
       </div>
 
       {change && (

@@ -26,7 +26,6 @@ export default function LoginPage() {
 
       if (response.ok) {
         const usuario = await response.json();
-        localStorage.setItem("token", usuario.token);
         localStorage.setItem("usuario", JSON.stringify(usuario));
         setTimeout(() => {
           router.push(`dashboard/${usuario.id}`);
@@ -55,16 +54,8 @@ export default function LoginPage() {
   };
 
   const handleSignUp = () => {
-    alert("Criar conta");
+    router.push("/novo");
   };
-
-  // useEffect(() => {
-  //   const usuario = localStorage.getItem("usuario");
-  //   if (!usuario) {
-  //     router.push(`dashboard/${usuario.id}`);
-  //     return;
-  //   }
-  // }, [router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-5">
@@ -109,7 +100,7 @@ export default function LoginPage() {
                 onClick={handleForgotPassword}
                 className="text-blue-900 text-sm font-medium hover:text-blue-700 transition-colors duration-300 cursor-pointer"
               >
-                Forgot password?
+                Esqueceu sua senha?
               </button>
             </div>
 
@@ -118,7 +109,7 @@ export default function LoginPage() {
               onClick={handleLogin}
               className="cursor-pointer w-full py-4 bg-teal-500 text-white rounded-full text-lg font-semibold mt-8 mb-6 hover:bg-teal-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-lg shadow-teal-500/30"
             >
-              Sing in
+              Entrar
             </button>
           </div>
         </form>
@@ -164,12 +155,12 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center text-blue-900 text-sm">
-          <p>Don&apos;t have an account?</p>
+          <p>Novo por aqui?</p>
           <button
             onClick={handleSignUp}
             className="font-semibold border-b-2 border-blue-900 hover:text-blue-700 hover:border-blue-700 transition-colors duration-300 "
           >
-            Sing up!
+            Cadastre-se!
           </button>
         </div>
       </div>
