@@ -19,7 +19,23 @@ Facilitar o controle financeiro pessoal através de uma interface moderna e resp
 
 ## ✨ Funcionalidades
 
+### Nova Conta / Login
+
+![Login](fhai-front/public/assets/login-fhai.png)
+![Nova conta](fhai-front/public/assets/cadastro.png)
+
+### 💰 Gerenciamento de Transações
+
+![Dashboard Principal](fhai-front/public/assets/dashboard.png)
+
+- ✅ Cadastro de receitas e despesas
+- ✅ Visualização de histórico de transações
+- ✅ Edição de transações
+- ✅ Exclusão de transações
+
 ### 👤 Gerenciamento de Usuários
+
+![Painel de Configurações - Perfil](fhai-front/public/assets/config-perfil.png)
 
 - ✅ Cadastro de novos usuários
 - ✅ Login e autenticação
@@ -28,18 +44,12 @@ Facilitar o controle financeiro pessoal através de uma interface moderna e resp
 
 ### 📍 Gerenciamento de Endereços
 
+![Painel de Configurações - Endereço](fhai-front/public/assets/config-end.png)
+
 - ✅ Cadastro de endereços
 - ✅ Edição de endereços
 - ✅ Exclusão de endereços
 - ✅ Múltiplos endereços por usuário
-
-### 💰 Gerenciamento de Transações
-
-- ✅ Cadastro de receitas e despesas
-- ✅ Visualização de histórico de transações
-- ✅ Edição de transações
-- ✅ Exclusão de transações
-- ✅ Filtros por usuário
 
 ---
 
