@@ -19,13 +19,15 @@ Facilitar o controle financeiro pessoal através de uma interface moderna e resp
 
 ## ✨ Funcionalidades
 
-### Nova Conta / Login
+### Login
 
 ![Login](fhai-front/public/assets/login-fhai.png)
 
 - ✅ Login e autenticação
 
-  ![Nova conta](fhai-front/public/assets/cadastro.png)
+### Nova Conta
+
+![Nova conta](fhai-front/public/assets/cadastro.png)
 
 - ✅ Cadastro de novos usuários
 
