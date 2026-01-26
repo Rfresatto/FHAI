@@ -69,7 +69,7 @@ export default function NovoUsuario() {
             email,
             contato: Number(contato),
           }),
-        }
+        },
       );
 
       if (response.ok) {
@@ -107,7 +107,7 @@ export default function NovoUsuario() {
           <h1 className="text-black text-lg font-medium mb-2">FHAI</h1>
           <Image src="/assets/icon.png" alt="icon" width={150} height={150} />
           <p className="text-black text-base font-medium leading-relaxed">
-            Create your account
+            Crie sua conta
           </p>
         </div>
 
@@ -142,7 +142,7 @@ export default function NovoUsuario() {
             <div>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Senha"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 className="w-full px-5 py-4 rounded-xl bg-white bg-opacity-80 text-gray-800 text-base focus:outline-none focus:bg-white focus:shadow-lg transition-all duration-300"
@@ -153,7 +153,7 @@ export default function NovoUsuario() {
             <div>
               <input
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="digite novamente"
                 value={confirmaSenha}
                 onChange={(e) => setConfirmaSenha(e.target.value)}
                 className="w-full px-5 py-4 rounded-xl bg-white bg-opacity-80 text-gray-800 text-base focus:outline-none focus:bg-white focus:shadow-lg transition-all duration-300"
