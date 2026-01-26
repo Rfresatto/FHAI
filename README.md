@@ -90,25 +90,9 @@ cd fhai-fintech
 cd sistema-fhai-spring-boot-main
 ```
 
-### 2. Configure o arquivo `.env` ou `application.properties`
+### 2. Execute o backend
 
-```properties
-# Configurações do Banco de Dados
-spring.datasource.url=jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-spring.datasource.username=RM562801
-spring.datasource.password=041198
-
-# Porta do servidor
-server.port=8080
-
-# JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-```
-
-### 3. Execute o backend
-
-```bash 
+```bash
 acesse src/main/java/br/com/fiap/fhai/FhaiApplication.java
 RUN ou Shift + F10
 ```
@@ -131,13 +115,7 @@ cd fhai-front
 npm install
 ```
 
-### 3. Configure o arquivo `.env`
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
-```
-
-### 4. Execute o frontend
+### 3. Execute o frontend
 
 ```bash
 npm run dev
@@ -199,7 +177,3 @@ Este projeto foi desenvolvido para fins acadêmicos como parte do curso de Anál
 - [ ] Notificações de vencimento
 - [ ] Modo escuro
 - [ ] Aplicativo mobile
-
----
-
-⭐ **Desenvolvido com dedicação pela equipe FHAI**
