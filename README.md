@@ -22,7 +22,12 @@ Facilitar o controle financeiro pessoal através de uma interface moderna e resp
 ### Nova Conta / Login
 
 ![Login](fhai-front/public/assets/login-fhai.png)
-![Nova conta](fhai-front/public/assets/cadastro.png)
+
+- ✅ Login e autenticação
+
+  ![Nova conta](fhai-front/public/assets/cadastro.png)
+
+- ✅ Cadastro de novos usuários
 
 ### 💰 Gerenciamento de Transações
 
@@ -37,8 +42,6 @@ Facilitar o controle financeiro pessoal através de uma interface moderna e resp
 
 ![Painel de Configurações - Perfil](fhai-front/public/assets/config-perfil.png)
 
-- ✅ Cadastro de novos usuários
-- ✅ Login e autenticação
 - ✅ Edição de dados pessoais
 - ✅ Exclusão de conta
 
